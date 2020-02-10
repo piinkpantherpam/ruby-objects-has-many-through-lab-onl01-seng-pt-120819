@@ -1,43 +1,27 @@
 require "spec_helper"
 
 describe "Appointment" do
+  let!(:martin) { Patient.new("Martin Jones") } 
+  let!(:doctor_who) { Doctor.new("The Doctor") }
+  let!(:appointment) { Appointment.new("Friday, January 32nd", doctor_who) }
 
-  describe ".all" do
-    it "knows about all appointments that have been created" do
-      doctor_who = Doctor.new("The Doctor")
-      hevydevy = Patient.new("Devin Townsend")
-      doctor_who.new_appointment(hevydevy, "Friday, January 32nd")
-      appointment = doctor_who.new_appointment(hevydevy, "Caturday, January Purrty2nd")
-      doctor_who.new_appointment(hevydevy, "Satunday, January 34nd")
-
-      expect(Appointment.all).to include(appointment)
-    end
-  end
-
-  describe "#new" do
-    it "initializes with a date, patient, and doctor" do
-      doctor_who = Doctor.new("The Doctor")
-      hevydevy = Patient.new("Devin Townsend")
-
-      expect{Appointment.new("Friday, January 32nd", hevydevy, doctor_who)}.to_not raise_error
+  describe "#new" do 
+    it "initializes with a date and a doctor" do 
+      expect{Appointment.new("Thursday, October 31st", doctor_who)}.to_not raise_error
     end
   end
 
   describe "#patient" do
-    it "belongs to a patient" do
-      doctor_who = Doctor.new("The Doctor")
-      hevydevy = Patient.new("Devin Townsend")
-      appointment = hevydevy.new_appointment(doctor_who, "Friday, January 32nd")
-      expect(appointment.patient).to eq(hevydevy)
-    end
+    it "belongs to a patient" do 
+      appointment.patient = martin
+      expect(appointment.patient).to eq(martin)
+    end 
   end
 
-  describe "#doctor" do
-    it "belongs to a doctor" do
-      doctor_who = Doctor.new("The Doctor")
-      hevydevy = Patient.new("Devin Townsend")
-      appointment = doctor_who.new_appointment(hevydevy, "Friday, January 32nd")
+  describe "#doctor" do 
+    it "belongs to a doctor" do 
       expect(appointment.doctor).to eq(doctor_who)
+      expect(doctor_who.appointments).to include(appointment)
     end
   end
 end
